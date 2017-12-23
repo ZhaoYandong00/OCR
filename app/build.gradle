@@ -36,4 +36,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.rmtheis:tess-two:8.0.0'
+    compile("com.github.hotchemi:permissionsdispatcher:3.1.0") {
+        exclude module: "support-v13"
+    }
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
+
 }

@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zyd.ocr.MainActivity">
+    android:orientation="vertical">
 
     <Button
-        android:text="@string/start"
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:onClick="ocr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="@string/start" />
+
+
     <ImageView
         android:id="@+id/english"
-        android:src="@drawable/english"
-        android:scaleType="fitXY"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/start" />
+        android:contentDescription="@string/start"
+        android:scaleType="fitXY"
+        android:src="@drawable/english" />
+
+    <ImageView
+        android:id="@+id/chinese"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/start"
+        android:scaleType="fitXY"
+        android:src="@drawable/simplechinese" />
+
     <TextView
         android:id="@+id/english_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <ImageView
-        android:id="@+id/simple_chinese"
-        android:src="@drawable/simplechinese"
-        android:scaleType="fitXY"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/start" />
-    <TextView
-        android:id="@+id/simple_chinese_text"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/chinese_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

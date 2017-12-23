@@ -5,7 +5,10 @@ import android.content.Context;
 import junit.framework.Assert;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * SD卡工具包
@@ -21,16 +24,27 @@ class SDUtils {
      */
     static void assetsToSD(Context context, String targetPathName, String sourceName) {
         File file = new File(targetPathName);
-        if (file.exists()) {
+        if (file.exists())
             Assert.assertTrue(file.delete());
-        } else {
+        if (!file.exists()) {
             File fileParent = new File(file.getParent());
             if (!fileParent.exists())
                 Assert.assertTrue(fileParent.mkdirs());
+            try {
+                Assert.assertTrue(file.createNewFile());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            Assert.assertTrue(file.createNewFile());
-        } catch (IOException e) {
+        file = new File(targetPathName);
+        try (InputStream is = context.getAssets().open(sourceName); OutputStream os = new FileOutputStream(file)) {
+            byte[] bytes = new byte[2048];
+            int len;
+            while ((len = is.read(bytes)) != -1) {
+                os.write(bytes, 0, len);
+            }
+            os.flush();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
