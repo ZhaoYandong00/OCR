@@ -42,19 +42,31 @@ public class MainActivity extends AppCompatActivity {
      * TessBaseAPI初始化测第二个参数，就是识别库的名字不要后缀名。
      */
     private static String DEFAULT_LANGUAGE = "chi_sim";
+    /**
+     * 英文库
+     */
     private static String ENGLISH_LANGUAGE = "eng";
     /**
      * assets中的文件名
      */
     private static String DEFAULT_LANGUAGE_NAME = DEFAULT_LANGUAGE + ".traineddata";
+    /**
+     * 英语库名字
+     */
     private static String ENGLISH_LANGUAGE_NAME = ENGLISH_LANGUAGE + ".traineddata";
     /**
      * 保存到SD卡中的完整文件名
      */
     private static String LANGUAGE_PATH = TESS_Data + File.separator + DEFAULT_LANGUAGE_NAME;
+    /**
+     * 英语库
+     */
     private static String ENGLISH_PATH = TESS_Data + File.separator + ENGLISH_LANGUAGE_NAME;
     private android.widget.ImageView english, chinese;
     private TextView englishText, chineseText;
+    /**
+     * 线程通信
+     */
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage (Message msg) {
@@ -77,11 +89,18 @@ public class MainActivity extends AppCompatActivity {
         this.chinese = findViewById(R.id.chinese);
         this.englishText = findViewById(R.id.english_text);
         this.chineseText = findViewById(R.id.chinese_text);
+        /**
+         * 检查权限获取
+         */
         MainActivityPermissionsDispatcher.getStorageAndCameraWithPermissionCheck(this);
         checkData();
 
     }
 
+    /**
+     * OCR识别
+     * @param view 按键
+     */
     public void ocr (View view) {
         checkData();
         //设置图片可以缓存
@@ -106,11 +125,20 @@ public class MainActivity extends AppCompatActivity {
             SDUtils.assetsToSD(getApplicationContext(), ENGLISH_PATH, ENGLISH_LANGUAGE_NAME);
     }
 
+    /**
+     * 得到权限
+     */
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void getStorageAndCamera () {
 
     }
 
+    /**
+     * 要求权限
+     * @param requestCode 请求码
+     * @param permissions 权限数组
+     * @param grantResults 结果数组
+     */
     @Override
     public void onRequestPermissionsResult (int requestCode, @NonNull String[] permissions,
                                             @NonNull int[] grantResults) {
@@ -119,16 +147,26 @@ public class MainActivity extends AppCompatActivity {
                 .onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
+    /**
+     * 请求显示
+     * @param request 请求
+     */
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void getStorageAndCameraOnShow (final PermissionRequest request) {
         showRationaleDialog(request);
     }
 
+    /**
+     * 请求拒绝
+     */
     @OnPermissionDenied({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void getStorageAndCameraDenied () {
         Toast.makeText(this, "你拒绝了该权限", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 不再提醒
+     */
     @OnNeverAskAgain({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void getStorageAndCameraNerver () {
         AskForPermission();
