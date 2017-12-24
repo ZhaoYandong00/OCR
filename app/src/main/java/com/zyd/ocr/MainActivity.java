@@ -7,12 +7,14 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -52,7 +54,20 @@ public class MainActivity extends AppCompatActivity {
     private static String LANGUAGE_PATH = TESS_Data + File.separator + DEFAULT_LANGUAGE_NAME;
     private static String ENGLISH_PATH = TESS_Data + File.separator + ENGLISH_LANGUAGE_NAME;
     private android.widget.ImageView english, chinese;
-
+    private TextView englishText, chineseText;
+    private Handler mHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage (Message msg) {
+            Bundle bundle = msg.getData();
+            String string = bundle.getString(DEFAULT_LANGUAGE);
+            if (string != null && !string.isEmpty())
+                chineseText.setText(string);
+            string = bundle.getString(ENGLISH_LANGUAGE);
+            if (string != null && !string.isEmpty())
+                englishText.setText(string);
+            return false;
+        }
+    });
 
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -60,30 +75,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.english = findViewById(R.id.english);
         this.chinese = findViewById(R.id.chinese);
+        this.englishText = findViewById(R.id.english_text);
+        this.chineseText = findViewById(R.id.chinese_text);
         MainActivityPermissionsDispatcher.getStorageAndCameraWithPermissionCheck(this);
         checkData();
+
     }
 
     public void ocr (View view) {
         checkData();
         //设置图片可以缓存
-        english.setDrawingCacheEnabled(true);
         chinese.setDrawingCacheEnabled(true);
+        english.setDrawingCacheEnabled(true);
         //获取缓存的bitmap
         Bitmap bmp = chinese.getDrawingCache();
-        OCRUtils.ocr(bmp, DATA_PATH, DEFAULT_LANGUAGE, new MyCallBack() {
-            @Override
-            public void response (String string) {
-                Log.i("CHINESE", string);
-            }
-        });
+        OCRUtils.ocr(bmp, DATA_PATH, DEFAULT_LANGUAGE, mHandler);
         bmp = english.getDrawingCache();
-        OCRUtils.ocr(bmp, DATA_PATH, ENGLISH_LANGUAGE, new MyCallBack() {
-            @Override
-            public void response (String string) {
-                Log.i("ENGLISH", string);
-            }
-        });
+        OCRUtils.ocr(bmp, DATA_PATH, ENGLISH_LANGUAGE, mHandler);
     }
 
     /**
