@@ -18,14 +18,33 @@ import java.net.URL;
  * 网络连接
  * Created by Administrator on 2017/12/25.
  */
-
 class MyHttpConnectionThread extends Thread {
+    /**
+     * 网址
+     */
     private String url;
+    /**
+     * RequestMethod:POST GET
+     */
     private String mod;
+    /**
+     * 传的参数
+     */
     private String param;
+    /**
+     * 线程通信
+     */
     private Handler handler;
 
-    MyHttpConnectionThread(String url, String mod, String param, Handler handler) {
+    /**
+     * 连接设置
+     *
+     * @param url     网址
+     * @param mod     模式
+     * @param param   参数
+     * @param handler 通信
+     */
+    MyHttpConnectionThread (String url, String mod, String param, Handler handler) {
         this.url = url;
         this.mod = mod;
         this.param = param;
@@ -33,7 +52,7 @@ class MyHttpConnectionThread extends Thread {
     }
 
     @Override
-    public void run() {
+    public void run () {
         try {
             HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
             urlConnection.setConnectTimeout(10000);
