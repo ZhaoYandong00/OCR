@@ -53,7 +53,7 @@ class MyHttpConnectionThread extends Thread {
 
     @Override
     public void run () {
-        try {
+        try{
             HttpURLConnection urlConnection = (HttpURLConnection) new URL(url).openConnection();
             urlConnection.setConnectTimeout(10000);
             urlConnection.setDoInput(true);
