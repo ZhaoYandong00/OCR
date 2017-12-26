@@ -15,15 +15,14 @@ lang为语言名称，fontname为字体名称，num为序号
 font_properties
 normal 0 0 0 0 0 
 ##	生成训练文件
-` 
-shapeclustering -F font_properties -U unicharset chi.normal.exp0.tr
-mftraining -F font_properties -U unicharset -O unicharset chi.normal.exp0.tr
-cntraining chi.normal.exp0.tr `
+```shapeclustering -F font_properties -U unicharset chi.normal.exp0.tr```
+```mftraining -F font_properties -U unicharset -O unicharset chi.normal.exp0.tr```
+```cntraining chi.normal.exp0.tr ```
 
 ##	合并文件
 ```combine_tessdata normal.```
 
-`echo normal 0 0 0 0 0>font_properties
+`echo normal 0 0 0 0 0>font_properties 
 tesseract  chi.normal.exp0.tif chi.normal.exp0  nobatch box.train
 unicharset_extractor chi.normal.exp0.box
 shapeclustering -F font_properties -U unicharset chi.normal.exp0.tr
