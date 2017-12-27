@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -150,32 +151,54 @@ public class MainActivity extends AppCompatActivity {
      */
     public void ocr(View view) {
         checkData();
-        getPicture();
+        getPicture(view);
     }
 
-    private void getPicture() {
+    /**
+     * 使用相册获取图片
+     */
+    private void getPicture(View view) {
         Intent intent = new Intent();
-        // 开启Pictures画面Type设定为image
-        intent.setType("image/*");
-        // 使用Intent.ACTION_GET_CONTENT这个Action
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        //取得相片后返回本画面
-        startActivityForResult(intent, 1);
+        if (view == findViewById(R.id.btn1)) {
+            // 开启Pictures画面Type设定为image
+            intent.setType("image/*");
+            // 使用Intent.ACTION_GET_CONTENT这个Action
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            //取得相片后返回本画面
+            startActivityForResult(intent, 1);
+        } else if (view == findViewById(R.id.btn3)) {
+            //调用相机
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            //调用后返回
+            startActivityForResult(intent, 2);
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            ContentResolver cr = this.getContentResolver();
-            try {
-                if (uri != null) {
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                    OCRView.setImageBitmap(bitmap);
-                    OCRUtils.ocr(bitmap, DATA_PATH, DEFAULT_LANGUAGE, mHandler);
+            Bitmap bitmap = null;
+            //相册获得图片
+            if (requestCode == 1) {
+                Uri uri = data.getData();
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    if (uri != null) {
+                        bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    }
+                } catch (FileNotFoundException e) {
+                    Log.e("Exception", e.getMessage(), e);
                 }
-            } catch (FileNotFoundException e) {
-                Log.e("Exception", e.getMessage(), e);
+            }//拍照获得图片
+            else if (requestCode == 2) {
+                if (data != null && data.hasExtra("data")) {
+                    bitmap = data.getParcelableExtra("data");
+                }
+            }
+            if (bitmap != null) {
+                OCRView.setImageBitmap(bitmap);
+                OCRUtils.ocr(bitmap, DATA_PATH, DEFAULT_LANGUAGE, mHandler);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

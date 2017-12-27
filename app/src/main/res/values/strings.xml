@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">OCR</string>
-    <string name="start">开始识别</string>
+    <string name="start">选择图片</string>
+    <string name="camera">拍照</string>
     <string name="name">产品名字</string>
     <string name="specification">规格型号</string>
     <string name="productNumber">产品编号</string>
