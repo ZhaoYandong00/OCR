@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -190,7 +189,8 @@ public class MainActivity extends AppCompatActivity {
                 } catch (FileNotFoundException e) {
                     Log.e("Exception", e.getMessage(), e);
                 }
-            }//拍照获得图片
+            }
+            //拍照获得图片
             else if (requestCode == 2) {
                 if (data != null && data.hasExtra("data")) {
                     bitmap = data.getParcelableExtra("data");
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (bitmap != null) {
                 OCRView.setImageBitmap(bitmap);
-                OCRUtils.ocr(bitmap, DATA_PATH, DEFAULT_LANGUAGE, mHandler);
+                OCRUtils.ocr(bitmap, DATA_PATH, DEFAULT_LANGUAGE + "+" + ENGLISH_LANGUAGE, mHandler);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
